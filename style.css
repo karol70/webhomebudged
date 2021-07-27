@@ -1,0 +1,107 @@
+body
+{
+	background-color: #778899;
+	font-family: 'Lato', sans-serif;
+}
+
+h1
+{
+	font-size: 62px;
+	font-weight: 700;
+	color: #FFF5EE;
+	margin-bottom: 20px;
+	text-align: center;
+	letter-spacing:4px;
+	text-transform: uppercase;
+	
+}
+h2
+{
+	text-align: center;
+	color: #FFF5EE;
+}
+
+#container
+{
+	margin-top: 50px;
+	width: 1000px;
+	margin-left: auto;
+	margin-right: auto;
+	
+}
+#panel
+{		
+	height: 250px;
+	width: 500px;
+	margin-left: 250px;
+	padding-top: 50px;
+}
+.przycisk, .przycisk2
+{	
+	
+	text-align:center;
+	margin-left: auto;
+	margin-right: auto;
+	width: 150px;
+	height: 40px;
+	background-color: #00FFFF;
+	margin-top: 30px;
+	border:2px solid #048080;
+	border-radius: 10px;
+	
+}
+
+.przycisk2
+{
+	height: 30px;
+	margin-top: 5px;
+}
+
+.przycisk2 > a.tilelink
+{
+	margin-top:5px;
+	text-decoration: none;
+	color: #4682B4;	
+	font-size: 20px;
+	text-align: justify;
+	
+}
+a.tilelink
+{
+	
+	text-decoration: none;
+	color: #4682B4;	
+	font-size: 30px;
+	text-align: justify;
+	letter-spacing: 1px;
+}
+
+#napis
+{	
+	color: #FFF5EE;
+	text-align:center;
+	margin-top: 30px;
+	margin-left: auto;
+	margin-right: auto;
+	margin-bottom: 5px;
+}
+.przycisk:hover, .przycisk2:hover
+{
+	color: #099E27;
+	background-color:#00E8E8;
+	cursor: pointer;
+	
+}
+.row
+{
+	text-align:center;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+input
+{
+	padding: 5px;
+	margin-top: 10px;
+	
+}
