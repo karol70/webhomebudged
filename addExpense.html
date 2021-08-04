@@ -13,6 +13,7 @@
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" rel="stylesheet">
+	<script type ="text/javascript" src ="script.js"></script>
 
 		
 </head>
@@ -21,22 +22,27 @@
 	<header>
 		<h1> Budżet domowy </h1>
 		
-		<nav id="topnav">
-			<ul class="menu">
-			<li><a href ="#">Strona główna</a></li>
-			<li><a href ="#">Dodaj przychód</a></li>
-			<li><a href ="#">Dodaj wydatek</a></li>
-			<li><a href ="#">Przeglądaj bilans</a></li>
-			<li><a href ="#">Ustawienia</a></li>
-			<li><a href ="#">Wyloguj się</a></li>
-			</ul>
+		<nav class="topnav">
+			<a href ="menu.html">Strona główna</a>
+			<a href ="addIncome.html">Dodaj przychód</a>
+			<a href ="addExpense.html">Dodaj wydatek</a>
+			<div class="dropdown"><a href="#">Przeglądaj bilans</a>
+				<ul>
+					<li><a href="showBalance.html">Bieżący miesiąc</a></li>
+					<li><a href="showBalance.html">Poprzedni miesiąc</a></li>
+					<li><a href="showBalance.html">Bieżący rok</a></li>
+					<li><a href="showBalance.html">Niestandardowy</a></li>
+				</ul>
+			</div>
+			<a href ="settings.html">Ustawienia</a>
+			<a href ="index.html">Wyloguj się</a>
 			
 		</nav>
 	</header>
 	
 	<article>
 	
-		<div id="container">
+		<div class="container">
 			<h4> Dodaj wydatek</h4>
 			
 		<div class="square">
