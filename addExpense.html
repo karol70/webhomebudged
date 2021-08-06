@@ -10,18 +10,17 @@
 	<meta name="keywords" content="budżet, bilans, pieniądze, oszczędności, oszczędzać" />
 	
 	<link rel ="stylesheet" href = "style.css" type="text/css" />
-	<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-	<link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet">
 	<script type ="text/javascript" src ="script.js"></script>
+	<link rel="stylesheet" href="css/fontello.css">
 
 		
 </head>
 <body>
 
-	<header>
-		<h1> Budżet domowy </h1>
-		
+	<header>	
 		<nav class="topnav">
 			<a href ="menu.html">Strona główna</a>
 			<a href ="addIncome.html">Dodaj przychód</a>
@@ -57,9 +56,9 @@
 					
 				<legend id="legenda"> Sposób płatności </legend>
 				
-					<div><label><input type="radio" value="1" name="Gotowka" checked> Gotówka </label></div>
-					<div><label><input type="radio" value="2" name="KDebet"> Karta debetowa </label></div>
-					<div><label><input type="radio" value="3" name="KKredyt"> Karta kredytowa </label></div>
+					<div><label><input type="radio" value="1" name="platnosc" checked> Gotówka </label></div>
+					<div><label><input type="radio" value="2" name="platnosc"> Karta debetowa </label></div>
+					<div><label><input type="radio" value="3" name="platnosc"> Karta kredytowa </label></div>
 				
 			</fieldset>						
 		</div>
@@ -79,7 +78,7 @@
 					<div style="margin-top:10px;">
 						<select id="kategoria" name="kategoria[]" multiple size="8">
 						
-							<option value="a"selected>Jedzenie</option>
+							<option value="a"selected><i class="icon-food"></i>Jedzenie</option>
 							<option value="b">Mieszkanie</option>
 							<option value="c">Transport</option>
 							<option value="d">Telekomunikacja</option>
@@ -95,7 +94,7 @@
 							<option value="o">Na złotą jesień, czyli emeryturę</option>
 							<option value="p">Spłata długów</option>
 							<option value="r">Darowizna</option>
-							<option value="s">Inne Wydatki</option>
+							<option value="s">Inne wydatki</option>
 						</select>
 					</div>
 			</fieldset>	
@@ -104,16 +103,18 @@
 				<fieldset>					
 				<legend id="legenda"> Komentarz </legend>
 					<div><label for="komentarz">  </label></div>
-					<textarea name ="komentarz" id ="komentarz" rows ="8" cols="50" maxlength="25" minlength="10"> </textarea>
+					<textarea name ="komentarz" id ="komentarz" rows ="4" cols="50" maxlength="25" minlength="10"> </textarea>
 					</fieldset>	
 				
 		</div>
-			<div class="przycisk3">
-				<a href="Dodaj" class="tilelink">Dodaj</a>
-			</div>
-			<div class="przycisk3">
-				<a href="Anuluj" class="tilelink">Anuluj</a>
-			</div>
+			<div class="square">
+				<div class="przycisk3">
+					<a href="Dodaj" class="tilelink">Dodaj</a>
+				</div>
+				<div class="przycisk3">
+					<a href="Anuluj" class="tilelink">Anuluj</a>
+				</div>
+			</div>	
 		</div>
 		
 	</article>
