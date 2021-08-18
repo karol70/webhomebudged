@@ -11,12 +11,11 @@ function sumOfIncomes()
 	var allegro;
 	var inne;
 	var suma;
-	wynagrodzenie = document.getElementById("wynagrodzenie").value;
-	odsetki = document.getElementById("odsetki").value;
-	 allegro = document.getElementById("allegro").value;
-	 inne = document.getElementById("inne").value;
+	wynagrodzenie = parseInt(document.getElementById("wynagrodzenie").innerText);
+	odsetki = parseInt(document.getElementById("odsetki").innerText);
+	 allegro = parseInt(document.getElementById("allegro").innerText);
+	 inne = parseInt(document.getElementById("inne").innerText);
 	suma = wynagrodzenie + odsetki + allegro + inne;
-
 	document.getElementById("suma").innerHTML = suma;	
 }
 
