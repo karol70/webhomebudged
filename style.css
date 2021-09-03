@@ -24,3 +24,8 @@ body
 }
 
 */
+.error
+{
+	color:red;
+	margin-bottom: 5px;
+}

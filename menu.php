@@ -1,3 +1,16 @@
+<?php
+	
+	session_start();
+	
+	if(!isset($_SESSION['zalogowany']))
+	{
+		header('Location:index.php');
+		exit();
+	}
+
+?>
+
+
 <!DOCTYPE HTML>
 <html lang="pl">
 <head>
@@ -35,15 +48,15 @@
 				<ul class="navbar-nav mr-auto">
 				
 					<li class="nav-item ">
-						<a class="nav-link active" href="menu.html"> Strona główna </a>
+						<a class="nav-link active" href="menu.php"> Strona główna </a>
 					</li>
 					
 					<li class="nav-item">
-						<a class="nav-link" href="#"> Dodaj przychód </a>
+						<a class="nav-link" href="addIncome.php"> Dodaj przychód </a>
 					</li>
 					
 					<li class="nav-item">
-						<a class="nav-link" href="addExpense.html"> Dodaj wydatek </a>
+						<a class="nav-link" href="addExpense.php"> Dodaj wydatek </a>
 					</li>
 					
 					<li class="nav-item dropdown">
@@ -51,17 +64,17 @@
 						Przeglądaj bilans
 					  </a>
 					  <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-						<li><a class="dropdown-item" href="showBalance.html">Bieżący miesiąc</a></li>
-						<li><a class="dropdown-item" href="showBalance.html">Poprzedni miesiąc</a></li>
-						<li><a class="dropdown-item" href="showBalance.html">Bieżący rok</a></li>					
-						<li><a class="dropdown-item" href="showBalance.html">Niestandardowy</a></li>
+						<li><a class="dropdown-item" href="showBalance.php">Bieżący miesiąc</a></li>
+						<li><a class="dropdown-item" href="showBalance.php">Poprzedni miesiąc</a></li>
+						<li><a class="dropdown-item" href="showBalance.php">Bieżący rok</a></li>					
+						<li><a class="dropdown-item" href="showBalance.php">Niestandardowy</a></li>
 					  </ul>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link" href="addExpense.html"> Ustawienia </a>
+						<a class="nav-link" href="#"> Ustawienia </a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link" href="#"> Wyloguj się </a>
+						<a class="nav-link" href="logout.php"> Wyloguj się </a>
 					</li>
 				</ul>
 			</div>
