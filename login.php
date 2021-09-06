@@ -9,12 +9,15 @@
 	}
 	
 	require_once "connect.php";
+	mysqli_report(MYSQLI_REPORT_STRICT);
 	
-	$polaczenie = @new mysqli($host,$db_user,$db_password,$db_name);
+	try
+	{
+	$polaczenie = new mysqli($host,$db_user,$db_password,$db_name);
 	
 	if($polaczenie->connect_errno!=0)
 	{
-		echo "Error: ".$polaczenie->connect_errno;
+		throw new Exception (mysqli_connect_errno());
 	}
 	else
 	{
@@ -23,7 +26,7 @@
 		
 		$email = htmlentities($email, ENT_QUOTES,"UTF-8");
 			
-		if($rezultat = @$polaczenie->query(sprintf("SELECT * FROM users WHERE email='%s'",
+		if($rezultat = $polaczenie->query(sprintf("SELECT * FROM users WHERE email='%s'",
 		mysqli_real_escape_string($polaczenie,$email))))
 		{
 			
@@ -61,10 +64,20 @@
 			}
 		
 		}
+		else
+		{
+			throw new Exception ($polaczenie->error);
+		}
 			
 		$polaczenie->close();
-	
 	}
+	}
+	catch (Exception $e)
+	{
+		echo '<span style="color:red;">Błąd serwera! Przepraszamy za niedogodności i prosimy o wizytę w innym terminie!</span>';
+		echo '<br />Informacja developerska: '.$e;
+	}
+	
 	
 
 ?>
