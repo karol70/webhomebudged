@@ -2,12 +2,108 @@
 	
 	session_start();
 	
-	if(!isset($SESSION['zalogowany']))
+	if(!isset($_SESSION['zalogowany']))
 	{
 		header('Location:index.php');
 		exit();
 	}
-
+	
+	if(isset ($_POST['kwota']))
+	{
+	
+			$all_OK = true;
+			$kwota = $_POST['kwota'];
+			$kwota = str_replace(',','.',$kwota);
+		
+			if (!is_numeric($kwota))
+			{
+				$all_OK = false;
+				$_SESSION['e_kwota'] = "Kwota może zawierać jedynie cyfry";
+			}
+			
+			$znak = '.';
+			$czywystepuje = strpos($kwota, $znak);
+			
+			if($czywystepuje === true)
+			{
+				$kwotanaczesci = explode(".",$kwota);
+				
+				if(strlen($kwotanaczesci[0])>6)
+				{
+					$all_OK = false;
+					$_SESSION['e_kwota'] = "Maksymalna liczba cyfr przed przecinkiem wynosi 6";
+				}	
+				
+				if(strlen($kwotanaczesci[1])>2)
+				{
+					$all_OK = false;
+					$_SESSION['e_kwota'] = "Maksymalna liczba cyfr po przecinku wynosi 2";
+				}
+			}
+			
+			if(!isset($_POST['kategoria']))
+			{
+				$all_OK = false;
+				$_SESSION['e_kategoria'] = "Wybierz kategorię";
+			}
+			
+			else{
+			$kategoria = $_POST['kategoria'];
+			}
+			
+			$metoda = $_POST['metoda'];
+			
+			$data = $_POST['data'];
+			
+			
+			$komentarz = $_POST['komentarz'];
+			
+			require_once "connect.php";
+			mysqli_report(MYSQLI_REPORT_STRICT);
+			
+		
+		try
+		{
+			$polaczenie = new mysqli($host,$db_user,$db_password,$db_name);
+			if($polaczenie->connect_errno!=0)
+			{
+				throw new Exception(mysqli_connect_errno());
+			}
+			else
+			{
+				if($all_OK==true)
+				{   
+					$userid = $_SESSION['id'];
+					
+					$resultkatid = $polaczenie->query("SELECT id FROM expenses_category_assigned_to_users WHERE user_id = '$userid' AND name ='$kategoria'");
+					$wierszkatid = $resultkatid->fetch_assoc();
+					$katid = $wierszkatid['id'];
+					
+					$resultmetid = $polaczenie->query("SELECT id FROM payment_methods_assigned_to_users WHERE user_id = '$userid' AND name ='$metoda'");
+					$wierszmetid = $resultmetid->fetch_assoc();
+					$metid = $wierszmetid['id'];
+											
+					if ($polaczenie->query("INSERT INTO expenses VALUES(NULL, '$userid', '$katid', '$metid', '$kwota','$data','$komentarz')"))
+					{
+						$_SESSION['dodanywydatek']="Wydatek został dodany!";
+						header('Location:addExpense.php');
+					}
+					else
+					{
+						throw new Exception($polaczenie->error);
+					}
+				}
+		
+				$polaczenie->close();
+			}
+		}
+	
+	catch (Exception $e)
+	{
+		echo '<span style="color:red;">Błąd serwera! Przepraszamy za niedogodności i prosimy o wizytę w innym terminie!</span>';
+		echo '<br />Informacja developerska: '.$e;
+	} 
+	}
 ?>
 
 
@@ -27,7 +123,7 @@
 		<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet">
-	<script src ="script.js"></script>
+	<script type="text/javascript" src ="script.js"></script>
 	<link rel="stylesheet" href="css/fontello.css">
 
 		
@@ -54,11 +150,11 @@
 					</li>
 					
 					<li class="nav-item">
-						<a class="nav-link" href="addIncome.php"> Dodaj przychód </a>
+						<a class="nav-link " href="addIncome.php"> Dodaj przychód </a>
 					</li>
 					
 					<li class="nav-item ">
-						<a class="nav-link active" href="addExpense.php" Dodaj wydatek </a>
+						<a class="nav-link active" href="addExpense.php"> Dodaj wydatek </a>
 					</li>
 					
 					<li class="nav-item dropdown">
@@ -110,70 +206,118 @@
 	
 		<div class="container mt-5 text-light">
 		
-		 <form class="bg-success p-4 w-50 mx-auto " style="--bs-bg-opacity: .5;">
+		 <form class="bg-success p-4 w-50 mx-auto " style="--bs-bg-opacity: .5;" method="post">
 		
 		 <h2 class="text-uppercase text-center mx-auto mb-4">Dodaj wydatek</h2>
+		 <?php
+			if (isset($_SESSION['dodanywydatek']))
+			{
+				echo '<div class ="text-center">'.$_SESSION['dodanywydatek'].'</div>';
+				unset($_SESSION['dodanywydatek']);
+			}
+		 ?>
 
 				<div class="form-inline col-sm-8 col-lg-6 mb-3 mx-auto">
 					<label class="text-uppercase" for="kwota"> Kwota: </label>
-					<input class="form-control" type="text" name="kwota" id="kwota">
-				
+					<input class="form-control" type="text" name="kwota" id="kwota">				
 				</div>
-				
+				<?php
+					if(isset ($_SESSION['e_kwota']))
+					{
+					 echo '<div class="error text-center">'.$_SESSION['e_kwota'].'</div>';
+					unset($_SESSION['e_kwota']);
+					}
+				?>
 				<div class="mt-3 col-sm-8 col-lg-6 mb-3 mx-auto">
 					<label class="text-uppercase mb-1" > Metoda płatności: </label>
 						<div class="form-check col-sm-8 col-lg-6 mb-3 " >
-							<input class="form-check-input " type="radio" name="radios" id="opt1" value="option1" checked>
+							<input class="form-check-input " type="radio" name="metoda" id="opt1" value="Gotówka" checked/>
 							 <label class="form-check-label" for="opt1">Gotówka</label>
 						</div>
 							
 						<div class="form-check col-sm-8 col-lg-6 mb-3 ">
-							 <input class="form-check-input" type="radio" name="radios" id="opt2" value="option2">
+							 <input class="form-check-input" type="radio" name="metoda" id="opt2" value="Karta debetowa"/>
 							 <label class="form-check-label" for="opt2">Karta debetowa</label>	
 						</div>
 							
 						<div class="form-check col-sm-8 col-lg-6 mb-3 ">
-							<input class="form-check-input" type="radio" name="radios" id="opt3" value="option3">
+							<input class="form-check-input" type="radio" name="metoda" id="opt3" value="Karta kredytowa"/>
 							<label class="form-check-label" for="opt3">Karta kredytowa</label>
 						</div>
 				</div>
 				
 				<div class="form-inline col-sm-8 col-lg-6 mb-3 mx-auto">
 					<label class="text-uppercase" for="data"> Data: </label>
-					<input class="form-control" type="date" name="data" id="data">
+					<input class="form-control" type="date" name="data" id="data" >
 				</div>
+				<script>
+					var date = new Date();
+
+					var day = date.getDate();
+					var month = date.getMonth() + 1;
+					var year = date.getFullYear();
+
+					if (month < 10) month = "0" + month;
+					if (day < 10) day = "0" + day;
+
+					var today = year + "-" + month + "-" + day;       
+					document.getElementById("data").value = today;									
+				</script>
 				
 				<div class="form-group mt-3 col-sm-8 col-lg-6 mx-auto">
 					<label class="text-uppercase" for="kategoria"> Kategoria wydatku: </label>
-					<select class="form-control" size="6" id="kategoria">
-							<option selected>Jedzenie</option>
-							<option value="2">Mieszkanie</option>
-							<option value="3">Transport</option>
-							<option value="4">Telekomunikacja</option>
-							<option value="5">Opieka zdrowotna</option>
-							<option value="6">Ubranie</option>
-							<option value="7">Higiena</option>
-							<option value="8">Dzieci</option>
-							<option value="9">Rozrywka</option>
-							<option value="10">Wycieczka</option>
-							<option value="11">Szkolenia</option>
-							<option value="12">Książki</option>
-							<option value="13">Oszczędności</option>
-							<option value="14">Na złotą jesień, czyli emeryturę</option>
-							<option value="15">Spłata długów</option>
-							<option value="16">Darowizna</option>
-							<option value="17">Inne wydatki</option>
+					<select class="form-control" size="6" id="kategoria" name="kategoria">					
+						<?php
+							require_once "connect.php";
+						mysqli_report(MYSQLI_REPORT_STRICT);
+			
+		
+						try
+						{
+							$polaczenie = new mysqli($host,$db_user,$db_password,$db_name);
+							if($polaczenie->connect_errno!=0)
+							{
+								throw new Exception(mysqli_connect_errno());
+							}
+							else
+							{
+								$userId = $_SESSION['id'];
+								$kat = $polaczenie->query("SELECT name FROM expenses_category_assigned_to_users WHERE user_id = '$userId'");
+							
+							 while($pojkat = $kat->fetch_assoc())
+							 {
+								 $nazwakategorii = $pojkat['name'];
+								echo '<option value='."$nazwakategorii".'>'."$nazwakategorii".'</option>';
+							 }
+								$polaczenie->close();
+							}
+						}
+							
+						catch (Exception $e)
+						{
+							echo '<span style="color:red;">Błąd serwera! Przepraszamy za niedogodności i prosimy o wizytę w innym terminie!</span>';
+							echo '<br />Informacja developerska: '.$e;
+						}
+						
+						?>
 					</select>
+					<?php
+						if(isset ($_SESSION['e_kategoria']))
+						{
+						 echo '<div class="error text-center">'.$_SESSION['e_kategoria'].'</div>';
+						unset($_SESSION['e_kategoria']);
+						}
+					?>
 				</div>
 				
 					 <div class="form-group mt-3 col-sm-8 col-lg-6 mx-auto">
 						<label class="text-uppercase" for="komentarz">Komentarz:</label>
-						<textarea class="form-control" id="komentarz" rows="3"></textarea>
+						<textarea class="form-control" id="komentarz" rows="3" name="komentarz"></textarea>
 					  </div>
 			
 				<div class="mt-3 mx-auto text-center">
-					<button type="button" class="btn btn-success">Dodaj</button>
-					<button type="button" class="btn btn-warning">Anuluj</button>
+					<input type="submit"  class="btn btn-success" value="Dodaj"/>
+					<a href="addExpense.php"><button type="button" class="btn btn-warning">Anuluj</button></a>
 				</div>
 			</form>	
 
