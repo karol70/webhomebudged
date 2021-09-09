@@ -25,6 +25,7 @@
 			
 			<a class="navbar-brand" href="#"><img src="img/graph-up.svg" width="30" height="30" class="d-inline-block mx-2 align-bottom text-light" alt=""> Oszczedzaj.pl</a>
 			<i class="bi bi-graph-up" aria-hidden="true"></i>
+			
 			<button class="navbar-toggler mx-3" type="button" data-bs-toggle="collapse" data-bs-target="#mainmenu" aria-controls="mainmenu" aria-expanded="false" aria-label="Toggle navigation">
 				<span class="navbar-toggler-icon"></span>
 			</button>
@@ -34,15 +35,15 @@
 				<ul class="navbar-nav mr-auto">
 				
 					<li class="nav-item ">
-						<a class="nav-link" href="menu.html"> Strona główna </a>
+						<a class="nav-link" href="menu.php"> Strona główna </a>
 					</li>
 					
 					<li class="nav-item">
-						<a class="nav-link" href="addIncome.html"> Dodaj przychód </a>
+						<a class="nav-link " href="addIncome.php"> Dodaj przychód </a>
 					</li>
 					
 					<li class="nav-item ">
-						<a class="nav-link " href="addExpense.html"> Dodaj wydatek </a>
+						<a class="nav-link " href="addExpense.php"> Dodaj wydatek </a>
 					</li>
 					
 					<li class="nav-item dropdown">
@@ -50,9 +51,9 @@
 						Przeglądaj bilans
 					  </a>
 					  <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-						<li><a class="dropdown-item" href="showBalance.html">Bieżący miesiąc</a></li>
-						<li><a class="dropdown-item" href="showBalance.html">Poprzedni miesiąc</a></li>
-						<li><a class="dropdown-item" href="showBalance.html">Bieżący rok</a></li>					
+						<li><a class="dropdown-item" href="showBalance.php">Bieżący miesiąc</a></li>
+						<li><a class="dropdown-item" href="showBalance.php">Poprzedni miesiąc</a></li>
+						<li><a class="dropdown-item" href="showBalance.php">Bieżący rok</a></li>					
 						<li><button type="button" class="dropdown-item btn" data-bs-toggle="modal" data-bs-target="#Modal">Niestandardowy</button></li>
 					  </ul>
 					</li>
@@ -60,7 +61,7 @@
 						<a class="nav-link" href="#"> Ustawienia </a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link" href="#"> Wyloguj się </a>
+						<a class="nav-link" href="logout.php"> Wyloguj się </a>
 					</li>
 				</ul>
 			</div>

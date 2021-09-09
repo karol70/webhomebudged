@@ -2,7 +2,7 @@
 	
 	session_start();
 	
-	if(!isset($SESSION['zalogowany']))
+	if(!isset($_SESSION['zalogowany']))
 	{
 		header('Location:index.php');
 		exit();

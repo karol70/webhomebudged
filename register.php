@@ -76,10 +76,23 @@
 				}
 				if($all_OK==true)
 				{
-					if ($polaczenie->query("INSERT INTO users VALUES(NULL,'$imie','$pass_hash','$e_mail')"))
+					if ($polaczenie->query("INSERT INTO users VALUES(NULL,'$imie','$pass_hash','$e_mail')")) 
 					{
-						$_SESSION['udanarejestracja']="Dziękujemy za rejestrację, możesz się już zalogować!";
-						header('Location:index.php');
+						$dane = $polaczenie->query("SELECT * FROM users WHERE email = '$e_mail'");
+						$wiersz = $dane->fetch_assoc();
+						$userId = $wiersz['id'];
+						
+						if(($polaczenie->query("INSERT INTO expenses_category_assigned_to_users SELECT 'NULL','$userId',name FROM expenses_category_default")) 
+						 &&($polaczenie->query("INSERT INTO payment_methods_assigned_to_users SELECT 'NULL','$userId',name FROM payment_methods_default"))
+						&&($polaczenie->query("INSERT INTO incomes_category_assigned_to_users SELECT 'NULL','$userId',name FROM incomes_category_default")))
+						{
+							$_SESSION['udanarejestracja']="Dziękujemy za rejestrację, możesz się już zalogować!";
+							header('Location:index.php');
+						}
+						else
+					{
+						throw new Exception($polaczenie->error);
+					}
 					}
 					else
 					{
@@ -193,7 +206,7 @@
 					}				
 				?>
 				<div class="text-center">
-					<input type="submit" class="btn btn-success mx-auto " value="Utwórz konto"></button>
+					<input type="submit" class="btn btn-success mx-auto " value="Utwórz konto"/>
 					<a href="index.php"><div class="btn btn-secondary mx-1"> Powrót do logowania</div></a>
 				</div>
 			</form>
