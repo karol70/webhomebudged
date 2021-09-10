@@ -39,9 +39,6 @@
 				if(password_verify($password,$wiersz['password']))
 				{
 				$_SESSION['zalogowany'] = true;
-			
-				
-				
 				$_SESSION['email'] = $wiersz['email'];
 				$_SESSION['id'] = $wiersz['id'];
 			

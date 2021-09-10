@@ -30,8 +30,7 @@ function setTodayDate()
 	if (day < 10) day = "0" + day;
 
 	var today = year + "-" + month + "-" + day;       
-	//document.getElementById("data").value = today;
-	return today;
+	document.getElementById("data").value = today;									
 }
 	
 	
