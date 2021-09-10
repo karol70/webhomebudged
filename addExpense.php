@@ -20,6 +20,11 @@
 				$all_OK = false;
 				$_SESSION['e_kwota'] = "Kwota może zawierać jedynie cyfry";
 			}
+			if ($kwota == '')
+			{
+				$all_OK = false;
+				$_SESSION['e_kwota'] = "Wprowadź kwotę";
+			}
 			
 			$znak = '.';
 			$czywystepuje = strpos($kwota, $znak);
