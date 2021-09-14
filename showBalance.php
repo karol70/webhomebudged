@@ -1,3 +1,67 @@
+<?php
+	
+	session_start();
+	
+	if(!isset($_SESSION['zalogowany']))
+	{
+		header('Location:index.php');
+		exit();
+	}
+	
+	if(isset($_GET['biezacymiesiac']))
+	{
+		
+		$biezacymiesiac = date('m');
+		$biezacyrok = date('Y');
+		$iloscdni = date('t');
+		
+		$_SESSION['dataod'] = "$biezacyrok".'-'."$biezacymiesiac".'-01';
+		$_SESSION['datado'] = "$biezacyrok".'-'."$biezacymiesiac".'-'."$iloscdni";
+		
+
+	}
+	if(isset($_GET['poprzednimiesiac']))
+	{
+		$poprzednimiesiac = date('m') -1;
+		if($poprzednimiesiac < 10)
+		{
+			$poprzednimiesiac = '0'."$poprzednimiesiac";
+		}
+		$iloscdnipoprzmies = date('t', strtotime("-1 MONTH"));
+		if($poprzednimiesiac == 12)
+		{
+		$rok = date('Y') -1;
+		}
+		else $rok = date('Y');
+		
+		$_SESSION['dataod'] =  "$rok".'-'."$poprzednimiesiac".'-01';
+		$_SESSION['datado'] =  "$rok".'-'."$poprzednimiesiac".'-'."$iloscdnipoprzmies";
+		
+		
+	}
+	if(isset($_GET['biezacyrok']))
+	{
+		$biezacyrok = date('Y');
+		$_SESSION['dataod'] = "$biezacyrok".'-01-01';
+		$_SESSION['datado'] = "$biezacyrok".'-12-31';
+		
+	}
+	
+	if(isset($_POST['dataod']) && ($_POST['datado'])) 
+	{
+		$_SESSION['dataod'] = $_POST['dataod'];
+		$_SESSION['datado'] = $_POST['datado'];	
+		
+		if(($_SESSION['dataod']) > ($_SESSION['datado']))
+		{
+			$_SESSION['e_daty'] = "<h2 class='text-center mt-5 text-uppercase'>"."Wprowadzono błędny okres. Data ".$_SESSION['dataod']." jest większa od ".$_SESSION['datado']."</h2>";
+		}
+	}
+	
+	
+		
+?>
+
 <!DOCTYPE HTML>
 <html lang="pl">
 <head>
@@ -51,9 +115,9 @@
 						Przeglądaj bilans
 					  </a>
 					  <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-						<li><a class="dropdown-item" href="showBalance.php">Bieżący miesiąc</a></li>
-						<li><a class="dropdown-item" href="showBalance.php">Poprzedni miesiąc</a></li>
-						<li><a class="dropdown-item" href="showBalance.php">Bieżący rok</a></li>					
+						<li><a class="dropdown-item" href="showBalance.php?biezacymiesiac=true" >Bieżący miesiąc</a></li>
+						<li><a class="dropdown-item" href="showBalance.php?poprzednimiesiac=true" >Poprzedni miesiąc</a></li>
+						<li><a class="dropdown-item" href="showBalance.php?biezacyrok">Bieżący rok</a></li>					
 						<li><button type="button" class="dropdown-item btn" data-bs-toggle="modal" data-bs-target="#Modal">Niestandardowy</button></li>
 					  </ul>
 					</li>
@@ -76,16 +140,19 @@
 								<span aria-hidden="true">&times;</span>
 							</button>
 						</div>
-							<div class="modal-body">
-								<div class="form-inline mx-auto">
-									<label> Data od: <input class="form-control" type="date" name ="dzien"></label>
-									<label> Data do: <input class="form-control" type="date" name ="dzien"></label>
+						<form method="post">
+								<div class="modal-body">
+									<div class="form-inline mx-auto">
+										<label> Data od: <input class="form-control" type="date" name ="dataod"></label>
+										<label> Data do: <input class="form-control" type="date" name ="datado"></label>
+									</div>
 								</div>
+							<div class="modal-footer">
+									<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Anuluj</button>
+									<input type="submit" class="btn btn-success" value="Pokaż bilans"/>
 							</div>
-						<div class="modal-footer">
-								<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Anuluj</button>
-								<button type="button" class="btn btn-success">Pokaż bilans</button>
-						</div>
+							
+						</form>
 					</div>
 				</div>
 			</div>
@@ -94,79 +161,149 @@
 	<article>
 		
 		<div class="container mx-auto text-light font-18">
-		<h2 class="text-center mt-5 text-uppercase"> Przeglądaj bilans</h2>
+		<?php
+		if(isset($_SESSION['e_daty']))
+			{
+				echo '<div class="error text-center">'.$_SESSION['e_daty'].'</div>';
+				unset($_SESSION['e_daty']);
+			}	
+			else
+			{
+				echo "<h2 class='text-center mt-5 text-uppercase'>"."Bilans przychodów i wydatków od ".$_SESSION['dataod']." do ".$_SESSION['datado']."</h2>";
+			}
+		?>
 				
 			<h5 class="h3 mx-auto text-center text-uppercase bg-success mt-3  col-4 col-lg-3"> Przychody </h5>
+		<div class="col-sm-8 col-lg-6 mb-3 mx-auto">		
+		<?php
 				
-			<div class="row mx-2">
-				<div class="col-6 col-lg-3">
-					<div class="bg-success my-1" style="--bs-bg-opacity: .75;"> <i class="icon-money-1"></i>  Wynagrodzenie </div>
-					<div class="bg-success my-1" style="--bs-bg-opacity: .75;"> <i class="icon-percent"></i>  Odsetki bankowe </div>
-					<div class="bg-success my-1" style="--bs-bg-opacity: .75;"> <i class="icon-basket"></i>  Sprzedaż na allegro </div>
-					<div class="bg-success my-1" style="--bs-bg-opacity: .75;"> <i class="icon-star"></i>  Inne </div>
-					<div class="bg-success my-1" style="--bs-bg-opacity: .75;"> Suma </div>
-				</div>
-				
-				<div class=" col-6 col-lg-3 text-center">
-					<div class="bg-success my-1" style="--bs-bg-opacity: .75;" ><div id="wynagrodzenie">5000</div></div>
-					<div class="bg-success my-1" style="--bs-bg-opacity: .75;" ><div id="odsetki">100</div> </div>
-					<div class="bg-success my-1" style="--bs-bg-opacity: .75;" ><div id="allegro">450</div> </div>
-					<div class="bg-success my-1" style="--bs-bg-opacity: .75;" ><div id="inne">0</div> </div>
-					<div class="bg-success my-1" style="--bs-bg-opacity: .75;"><div id="suma"></div> </div>
-					<script >
-					sumOfIncomes();		
-					</script>
-				</div>
-			</div>
+			require_once "connect.php";
+			mysqli_report(MYSQLI_REPORT_STRICT);
 			
+		
+		try
+		{
+			$polaczenie = new mysqli($host,$db_user,$db_password,$db_name);
+			if($polaczenie->connect_errno!=0)
+			{
+				throw new Exception(mysqli_connect_errno());
+			}
+			else
+			{
+				$id =$_SESSION['id']; 
+				$dataod = $_SESSION['dataod'];
+				$datado =$_SESSION['datado'] ;
+				
+				$wynik = $polaczenie->query("SELECT name AS kategoria, SUM(amount) AS suma FROM incomes,incomes_category_assigned_to_users AS cat WHERE incomes.user_id = '$id' AND cat.id = incomes.income_category_assigned_to_user_id AND date_of_income BETWEEN '$dataod' AND '$datado' GROUP BY name DESC");
+				if(($wynik->num_rows)>0)
+				{
+					echo "<table class ='table bg-success table-striped table-bordered' cellpadding =\"2\" border =1 style='--bs-bg-opacity: .75;'>";
+					echo '<thead class="thead-dark">';
+					echo "<th>"."Kategoria"."</th>";
+				echo "<th class='text-center'>"."Suma [PLN]"."</th>";
+					echo "</thead>";
+					
+					while ($r = $wynik->fetch_assoc())
+					{
+						echo "<tr>";
+						echo "<td style='width:50%;'>".$r['kategoria']."</td>";
+						echo "<td class='text-center'>".$r['suma']."</td>";
+						echo "</tr>";
+					}
+					$wyniksuma = $polaczenie->query("SELECT SUM(amount) AS suma FROM incomes,incomes_category_assigned_to_users WHERE incomes.user_id = $id AND incomes_category_assigned_to_users.id = incomes.income_category_assigned_to_user_id  AND date_of_income BETWEEN '$dataod' AND '$datado'");
+					$s = $wyniksuma->fetch_assoc();
+					echo "<tr>";
+					echo "<td style='width:50%;'><h4>"."SUMA"."</h4></td>";
+					echo "<td class='text-center' id='sumaprzychodow'><h4>".$s['suma']."</h4></td>";
+					echo "</tr>";
+					echo "</table>";
+					
+				}
+				else {
+					echo "<h3 class='text-center mt-1 mb-2' style='color:red;'>"."Brak przychodów w wybranym okresie"."</h2>";
+				}
+
+			
+				
+				$polaczenie->close();
+			}
+		}
+	
+		catch (Exception $e)
+		{
+			echo '<span style="color:red;">Błąd serwera! Przepraszamy za niedogodności i prosimy o wizytę w innym terminie!</span>';
+			echo '<br />Informacja developerska: '.$e;
+		} 
+				
+		?>
+		</div>	
 			
 			<h5 class="h3 mx-auto text-center text-uppercase bg-success mt-3  w-25"> Wydatki </h5>
 			
 			
-			<div class="row mx-2">
+		<div class=" col-sm-8 col-lg-6 mb-3 mx-auto">
 			
-				<div class="col-6 col-lg-3">
-					<div class="bg-success my-1" style="--bs-bg-opacity: .75;"><i class="icon-food" ></i>  Jedzenie</div>
-					<div class="bg-success my-1" style="--bs-bg-opacity: .75;"><i class="icon-home"></i>  Mieszkanie</div>
-					<div class="bg-success my-1" style="--bs-bg-opacity: .75;"><i class="icon-aboveground-rail"></i>  Transport</div>
-					<div class="bg-success my-1" style="--bs-bg-opacity: .75;"><i class="icon-mobile"></i>  Telekomunikacja</div>
-					<div class="bg-success my-1" style="--bs-bg-opacity: .75;"><i class="icon-hospital"></i>  Opieka zdrowotna</div>
-					<div class="bg-success my-1" style="--bs-bg-opacity: .75;"><i class="icon-t-shirt"></i>  Ubranie</div>
-					<div class="bg-success my-1" style="--bs-bg-opacity: .75;"><i class="icon-bath"></i>  Higiena</div>
-					<div class="bg-success my-1" style="--bs-bg-opacity: .75;"><i class="icon-child"></i>  Dzieci</div>
-					<div class="bg-success my-1" style="--bs-bg-opacity: .75;"><i class="icon-smile"></i>  Rozrywka</div>
-					<div class="bg-success my-1" style="--bs-bg-opacity: .75;"><i class="icon-flight"></i>  Wycieczka</div>
-					<div class="bg-success my-1" style="--bs-bg-opacity: .75;"><i class="icon-college"></i>  Szkolenia</div>
-					<div class="bg-success my-1" style="--bs-bg-opacity: .75;"><i class="icon-book-open"></i>  Książki</div>
-					<div class="bg-success my-1" style="--bs-bg-opacity: .75;"><i class="icon-money"></i>  Oszczędności</div>
-					<div class="bg-success my-1" style="--bs-bg-opacity: .75;"><i class="icon-hourglass"></i>  Na emeryturę</div>
-					<div class="bg-success my-1" style="--bs-bg-opacity: .75;"><i class="icon-bank"></i>  Spłata długów</div>
-					<div class="bg-success my-1" style="--bs-bg-opacity: .75;"><i class="icon-handshake-o"></i>  Darowizna</div>
-					<div class="bg-success my-1" style="--bs-bg-opacity: .75;"><i class="icon-star"></i>  Inne wydatki</div>
-					<div class="bg-success my-1" style="--bs-bg-opacity: .75;"> Suma </div>
-				</div>
+		<?php
+				
+			require_once "connect.php";
+			mysqli_report(MYSQLI_REPORT_STRICT);
 			
-				<div class="col-6 col-lg-3 text-center">
-					<div class="bg-success my-1" style="--bs-bg-opacity: .75;" id="jedzenie"> 200 </div>
-					<div class="bg-success my-1" style="--bs-bg-opacity: .75;" id="mieszkanie"> 1500 </div>
-					<div class="bg-success my-1" style="--bs-bg-opacity: .75;" id="transport"> 200 </div>
-					<div class="bg-success my-1" style="--bs-bg-opacity: .75;" id="telekomunikacja"> 100 </div>
-					<div class="bg-success my-1" style="--bs-bg-opacity: .75;" id="zdrowie"> 50 </div>
-					<div class="bg-success my-1" style="--bs-bg-opacity: .75;" id="ubrania"> 100 </div>
-					<div class="bg-success my-1" style="--bs-bg-opacity: .75;" id="higiena"> 100 </div>
-					<div class="bg-success my-1" style="--bs-bg-opacity: .75;" id="dzieci"> 0</div>
-					<div class="bg-success my-1" style="--bs-bg-opacity: .75;" id="rozrywka"> 0 </div>
-					<div class="bg-success my-1" style="--bs-bg-opacity: .75;" id="wycieczka"> 0 </div>
-					<div class="bg-success my-1" style="--bs-bg-opacity: .75;" id="szkolenia"> 0 </div>
-					<div class="bg-success my-1" style="--bs-bg-opacity: .75;" id="książki"> 0 </div>
-					<div class="bg-success my-1" style="--bs-bg-opacity: .75;" id="oszczędności"> 50</div>
-					<div class="bg-success my-1" style="--bs-bg-opacity: .75;" id="emerytura"> 0 </div>
-					<div class="bg-success my-1" style="--bs-bg-opacity: .75;" id="długi"> 0 </div>
-					<div class="bg-success my-1" style="--bs-bg-opacity: .75;" id="darowizna"> 0 </div>
-					<div class="bg-success my-1" style="--bs-bg-opacity: .75;" id="innewydatki"> 0 </div>
-					<div class="bg-success my-1" style="--bs-bg-opacity: .75;" id="sumawyd"> 2300 </div>
+		
+		try
+		{
+			$polaczenie = new mysqli($host,$db_user,$db_password,$db_name);
+			if($polaczenie->connect_errno!=0)
+			{
+				throw new Exception(mysqli_connect_errno());
+			}
+			else
+			{
+				$id =$_SESSION['id']; 
+				$dataod = $_SESSION['dataod'];
+				$datado =$_SESSION['datado'] ;
+				
+				$wynik = $polaczenie->query("SELECT name AS kategoria, SUM(amount) AS suma FROM expenses,expenses_category_assigned_to_users AS cat WHERE expenses.user_id = '$id' AND cat.id = expenses.expense_category_assigned_to_user_id AND date_of_expense BETWEEN '$dataod' AND '$datado' GROUP BY name DESC");
+				if(($wynik->num_rows)>0)
+				{
+					echo "<table class ='table bg-success table-striped table-bordered' cellpadding =\"2\" border =1 style='--bs-bg-opacity: .75;'>";
+					echo '<thead class="thead-dark">';
+					echo "<th>"."Kategoria"."</th>";
+					echo "<th class ='text-center'>"."Suma [PLN]"."</th>";
+					echo "</thead>";
 					
-				</div>
+					while ($r = $wynik->fetch_assoc())
+					{
+						echo "<tr>";
+						echo "<td style='width:50%;' >".$r['kategoria']."</td>";
+						echo "<td class='text-center'>".$r['suma']."</td>";
+						echo "</tr>";
+					}
+					$wyniksuma = $polaczenie->query("SELECT SUM(amount) AS suma FROM expenses,expenses_category_assigned_to_users WHERE expenses.user_id = $id AND expenses_category_assigned_to_users.id = expenses.expense_category_assigned_to_user_id  AND date_of_expense BETWEEN '$dataod' AND '$datado'");
+					$s = $wyniksuma->fetch_assoc();
+					echo "<tr>";
+					echo "<td style='width:50%;'><h4>"."SUMA"."</h4></td>";
+					echo "<td class='text-center' id='sumawydatkow'><h4>".$s['suma']."</h4></td>";
+					echo "</tr>";	
+					echo"</table>";
+					unset ($_SESSION['dataod']);
+					unset ($_SESSION['datado']);
+				}
+				else 
+					echo "<h3 class='text-center mt-1 mb-2' style='color:red;'>"."Brak wydatków w wybranym okresie"."</h2>";
+				
+
+				$polaczenie->close();
+			}
+		}
+	
+		catch (Exception $e)
+		{
+			echo '<span style="color:red;">Błąd serwera! Przepraszamy za niedogodności i prosimy o wizytę w innym terminie!</span>';
+			echo '<br />Informacja developerska: '.$e;
+		} 
+				
+	    ?>
+		</div>
 			
 			
 			<div class="col-4 col-lg-6" id="piechart"></div>
@@ -212,10 +349,29 @@
       }
     </script>
 
-			<div class ="bilans">
-				<p class="bg-success text-center mt-5 text-uppercase">Bilans: </p>
+			<div class="bg-success text-center mt-5 text-uppercase"id ="bilans">
+				
 			</div>
 		</div>
+		<script>
+		function checkBalance()
+		{
+			var sumaprzychodow = parseInt(document.getElementById("sumaprzychodow").innerText);
+			var sumawydatkow = parseInt(document.getElementById("sumawydatkow").innerText);
+			
+			
+			if(sumaprzychodow > sumawydatkow)
+			{
+				var roznica = sumaprzychodow - sumawydatkow;
+				document.getElementById("bilans").innerHTML = "Bilans: "+roznica+"PLN  Gratulacje. Świetnie zarządzasz finansami!";
+			}
+			else
+			{
+				var roznica = sumawydatkow - sumaprzychodow;
+				document.getElementById("bilans").innerHTML = "Bilans: -"+roznica+"PLN  Uważaj, wpadasz w długi!";
+			}
+		}
+		</script>
 		
 	</article>
 	

@@ -64,10 +64,10 @@
 						Przeglądaj bilans
 					  </a>
 					  <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-						<li><a class="dropdown-item" href="showBalance.php">Bieżący miesiąc</a></li>
-						<li><a class="dropdown-item" href="showBalance.php">Poprzedni miesiąc</a></li>
-						<li><a class="dropdown-item" href="showBalance.php">Bieżący rok</a></li>					
-						<li><a class="dropdown-item" href="showBalance.php">Niestandardowy</a></li>
+						<li><a class="dropdown-item" href="showBalance.php?biezacymiesiac=true" >Bieżący miesiąc</a></li>
+						<li><a class="dropdown-item" href="showBalance.php?poprzednimiesiac=true" >Poprzedni miesiąc</a></li>
+						<li><a class="dropdown-item" href="showBalance.php?biezacyrok">Bieżący rok</a></li>					
+						<li><button type="button" class="dropdown-item btn" data-bs-toggle="modal" data-bs-target="#Modal">Niestandardowy</button></li>
 					  </ul>
 					</li>
 					<li class="nav-item">
@@ -79,6 +79,31 @@
 				</ul>
 			</div>
 		</nav>
+		
+			<div class="modal fade" id="Modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="exampleModalLabel">Wprowadź okres bilansu</h5>
+							<button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+						<form method="post" action="showBalance.php">
+								<div class="modal-body">
+									<div class="form-inline mx-auto">
+										<label> Data od: <input class="form-control" type="date" name ="dataod"></label>
+										<label> Data do: <input class="form-control" type="date" name ="datado"></label>
+									</div>
+								</div>
+							<div class="modal-footer">
+									<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Anuluj</button>
+									<input type="submit" class="btn btn-success" value="Pokaż bilans"/>
+							</div>
+						</form>
+			</div>
+		</div>
+	</div>
 	</header>
 	
 	<article>

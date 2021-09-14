@@ -88,7 +88,7 @@
 					if ($polaczenie->query("INSERT INTO incomes VALUES(NULL, '$userid', '$katid', '$kwota','$data','$komentarz')"))
 					{
 						$_SESSION['dodanyprzychod']="Przychód został dodany!";
-						header('Location:addIncome.php');
+						//header('Location:addIncome.php');
 					}
 					else
 					{
@@ -167,9 +167,9 @@
 						Przeglądaj bilans
 					  </a>
 					  <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-						<li><a class="dropdown-item" href="showBalance.php">Bieżący miesiąc</a></li>
-						<li><a class="dropdown-item" href="showBalance.php">Poprzedni miesiąc</a></li>
-						<li><a class="dropdown-item" href="showBalance.php">Bieżący rok</a></li>					
+						<li><a class="dropdown-item" href="showBalance.php?biezacymiesiac=true" >Bieżący miesiąc</a></li>
+						<li><a class="dropdown-item" href="showBalance.php?poprzednimiesiac=true" >Poprzedni miesiąc</a></li>
+						<li><a class="dropdown-item" href="showBalance.php?biezacyrok">Bieżący rok</a></li>					
 						<li><button type="button" class="dropdown-item btn" data-bs-toggle="modal" data-bs-target="#Modal">Niestandardowy</button></li>
 					  </ul>
 					</li>
@@ -192,16 +192,18 @@
 								<span aria-hidden="true">&times;</span>
 							</button>
 						</div>
-							<div class="modal-body">
-								<div class="form-inline mx-auto">
-									<label> Data od: <input class="form-control" type="date" name ="dzien"></label>
-									<label> Data do: <input class="form-control" type="date" name ="dzien"></label>
+						<form method="post" action="showBalance.php">
+								<div class="modal-body">
+									<div class="form-inline mx-auto">
+										<label> Data od: <input class="form-control" type="date" name ="dataod"></label>
+										<label> Data do: <input class="form-control" type="date" name ="datado"></label>
+									</div>
 								</div>
+							<div class="modal-footer">
+									<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Anuluj</button>
+									<input type="submit" class="btn btn-success" value="Pokaż bilans"/>
 							</div>
-						<div class="modal-footer">
-								<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Anuluj</button>
-								<button type="button" class="btn btn-success">Pokaż bilans</button>
-						</div>
+						</form>
 					</div>
 				</div>
 			</div>
