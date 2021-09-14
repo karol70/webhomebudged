@@ -26,8 +26,8 @@
 		
 		$email = htmlentities($email, ENT_QUOTES,"UTF-8");
 			
-		if($rezultat = $polaczenie->query(sprintf("SELECT * FROM users WHERE email='%s'",
-		mysqli_real_escape_string($polaczenie,$email))))
+		if($rezultat = $polaczenie->query(sprintf("SELECT amount,name FROM incomes, incomes_category_assigned_to_users WHERE ")))
+		
 		{
 			
 			$ilu_userow = $rezultat->num_rows;

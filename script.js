@@ -33,4 +33,20 @@ function setTodayDate()
 	document.getElementById("data").value = today;									
 }
 	
+function checkBalance()
+{
+	var sumaprzychodow = parseInt(document.getElementById("sumaprzychodow").innerText);
+	var sumawydatkow = parseInt(document.getElementById("sumawydatkow").innerText);
 	
+	
+	if(sumaprzychodow > sumawydatkow)
+	{
+		var roznica = sumaprzychodow - sumawydatkow;
+		document.getElementById("bilans").innerHTML = "Bilans: "+roznica+"PLN  Gratulacje. Świetnie zarządzasz finansami!";
+	}
+	else
+	{
+		var roznica = sumawydatkow - sumaprzychodow;
+		document.getElementById("bilans").innerHTML = "Bilans: -"+roznica+"PLN  Uważaj, wpadasz w długi!";
+	}
+}
